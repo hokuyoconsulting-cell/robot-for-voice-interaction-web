@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ボイスロボットの作り方 | 北陽テック</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a1a18; --ink-light: #4a4a46; --ink-muted: #8a8a84;
+    --paper: #f7f5f0; --accent: #2d5a3d; --border: #d8d4cc;
+  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.8; }
+  header { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--border); }
+  .logo { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 400; color: var(--ink); text-decoration: none; }
+  .logo span { font-size: 12px; color: var(--ink-muted); display: block; letter-spacing: 0.15em; font-family: 'Noto Sans JP', sans-serif; font-weight: 300; }
+  .container { max-width: 720px; margin: 0 auto; padding: 4rem 3rem; }
+  h1 { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 400; margin-bottom: 1rem; }
+  .lead { font-size: 14px; color: var(--ink-light); margin-bottom: 2rem; }
+  .section { border-bottom: 0.5px solid var(--border); padding: 1.5rem 0; }
+  .section:last-child { border-bottom: none; }
+  .section-label { font-size: 11px; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 0.75rem; }
+  .section p { font-size: 14px; color: var(--ink-light); line-height: 1.9; margin-bottom: 0.5rem; }
+  .section ul, .section ol { font-size: 14px; color: var(--ink-light); line-height: 1.9; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+  .section li { margin-bottom: 0.25rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; color: var(--ink-light); margin-bottom: 0.75rem; }
+  th, td { border-bottom: 0.5px solid var(--border); padding: 0.5rem 0.25rem; text-align: left; vertical-align: top; }
+  th { font-weight: 500; color: var(--ink); font-size: 13px; }
+  td.num { text-align: right; white-space: nowrap; }
+  .diagram { background: #fff; border: 0.5px solid var(--border); border-radius: 4px; padding: 1rem; margin: 0.75rem 0; }
+  .diagram svg { width: 100%; height: auto; display: block; }
+  .highlight { background: #f0f4f1; border-left: 2px solid var(--accent); padding: 1rem 1.25rem; margin-top: 0.75rem; border-radius: 0 4px 4px 0; }
+  .highlight p { margin: 0; }
+  .button { display: inline-block; background: var(--accent); color: #fff; text-decoration: none; font-size: 14px; padding: 0.6rem 1.4rem; border-radius: 4px; margin-top: 0.5rem; }
+  code { font-family: Menlo, Consolas, monospace; font-size: 13px; background: #ecebe6; padding: 0 0.3em; border-radius: 3px; }
+  footer { padding: 2.5rem 3rem; border-top: 0.5px solid var(--border); }
+  footer a { font-size: 12px; color: var(--ink-muted); text-decoration: none; margin-right: 1.5rem; }
+  footer a:hover { color: var(--accent); }
+  footer p { font-size: 12px; color: var(--ink-muted); margin-top: 1rem; }
+  @media (max-width: 600px) { header { padding: 1.5rem; } .container { padding: 3rem 1.5rem; } footer { padding: 2rem 1.5rem; } }
+</style>
+</head>
+<body>
+<header>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/" class="logo">北陽テック<span>Hokuyo Tech</span></a>
+</header>
+<div class="container">
+  <h1>ボイスロボットの作り方</h1>
+  <p class="lead">iPhoneアプリ「ボイスロボット」で動かす、手のひらサイズのロボットの作り方です。はんだ付けは要りません。</p>
+
+  <div class="section">
+    <p class="section-label">1. 用意する部品</p>
+    <table>
+      <tr><th>部品</th><th>数</th></tr>
+      <tr><td>M5Stack ATOM Echo（本体。スピーカー・マイク付きの小さなマイコン）</td><td class="num">1</td></tr>
+      <tr><td>ATOM TailBAT（M5Stack製の電池・200mAh）</td><td class="num">1</td></tr>
+      <tr><td>赤色LED 3mm（目）</td><td class="num">2</td></tr>
+      <tr><td>抵抗 150Ω</td><td class="num">2</td></tr>
+      <tr><td>ミニブレッドボード 170穴（はんだ不要）</td><td class="num">1</td></tr>
+      <tr><td>ジャンパーワイヤー（オス－オス。本体とブレッドボードの間）</td><td class="num">3</td></tr>
+      <tr><td>ジャンパーワイヤー（オス－メス。ブレッドボードとLEDの間）</td><td class="num">4</td></tr>
+      <tr><td>外側のケース（例：直径約8cmの球体の缶）</td><td class="num">1</td></tr>
+    </table>
+    <p>ほかに、書き込みに使うパソコン（Windows・Mac）、USBケーブル（USB Type-C）、iPhoneが必要です。</p>
+  </div>
+
+  <div class="section">
+    <p class="section-label">2. 配線</p>
+    <p><strong>ブレッドボードのしくみ</strong>：縦に並んだ5つの穴（a〜e）は、中でつながっています。横の穴どうしはつながっていません。真ん中の溝の上と下もつながっていません。今回は上半分（a〜e）だけを使います。</p>
+    <p>図の黒い四角が、挿す穴です。同じ列（縦の並び）なら、a〜eのどの穴に挿しても同じです。</p>
+    <div class="diagram">
+      <svg viewBox="0 0 680 600" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans JP, sans-serif" font-size="13">
+<rect x="190" y="20" width="300" height="80" rx="10" fill="#f0f4f1" stroke="#2d5a3d" stroke-width="1.5"/>
+<text x="340" y="44" text-anchor="middle" fill="#1a1a18">本体 ATOM Echo（裏の端子）</text>
+<rect x="218" y="60" width="64" height="26" rx="4" fill="#fff" stroke="#8a8a84"/><text x="250" y="78" text-anchor="middle" fill="#1a1a18">G21</text>
+<rect x="308" y="60" width="64" height="26" rx="4" fill="#fff" stroke="#8a8a84"/><text x="340" y="78" text-anchor="middle" fill="#1a1a18">G（GND）</text>
+<rect x="398" y="60" width="64" height="26" rx="4" fill="#fff" stroke="#8a8a84"/><text x="430" y="78" text-anchor="middle" fill="#1a1a18">G25</text>
+<rect x="55" y="195" width="530" height="265" rx="8" fill="#fbfaf7" stroke="#b8b4ac"/>
+<rect x="60" y="325" width="520" height="16" fill="#ecebe6"/><text x="320" y="337" text-anchor="middle" font-size="10" fill="#8a8a84">真ん中の溝（ここで上と下は分かれる）</text>
+<text x="80" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">1</text>
+<rect x="76" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="76" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="110" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">2</text>
+<rect x="106" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="106" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="140" y="214" text-anchor="middle" font-size="10" fill="#c0392b" font-weight="700">3</text>
+<rect x="136" y="226" width="8" height="8" fill="#1a1a18"/>
+<rect x="136" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="136" y="266" width="8" height="8" fill="#1a1a18"/>
+<rect x="136" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="136" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="136" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="136" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="136" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="136" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="136" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="170" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">4</text>
+<rect x="166" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="166" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="200" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">5</text>
+<rect x="196" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="196" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="230" y="214" text-anchor="middle" font-size="10" fill="#c0392b" font-weight="700">6</text>
+<rect x="226" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="226" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="226" y="266" width="8" height="8" fill="#1a1a18"/>
+<rect x="226" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="226" y="306" width="8" height="8" fill="#1a1a18"/>
+<rect x="226" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="226" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="226" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="226" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="226" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="260" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">7</text>
+<rect x="256" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="256" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="290" y="214" text-anchor="middle" font-size="10" fill="#c0392b" font-weight="700">8</text>
+<rect x="286" y="226" width="8" height="8" fill="#1a1a18"/>
+<rect x="286" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="286" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="286" y="286" width="8" height="8" fill="#1a1a18"/>
+<rect x="286" y="306" width="8" height="8" fill="#1a1a18"/>
+<rect x="286" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="286" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="286" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="286" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="286" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="320" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">9</text>
+<rect x="316" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="316" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="350" y="214" text-anchor="middle" font-size="10" fill="#c0392b" font-weight="700">10</text>
+<rect x="346" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="346" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="346" y="266" width="8" height="8" fill="#1a1a18"/>
+<rect x="346" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="346" y="306" width="8" height="8" fill="#1a1a18"/>
+<rect x="346" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="346" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="346" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="346" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="346" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="380" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">11</text>
+<rect x="376" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="376" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="410" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">12</text>
+<rect x="406" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="406" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="440" y="214" text-anchor="middle" font-size="10" fill="#c0392b" font-weight="700">13</text>
+<rect x="436" y="226" width="8" height="8" fill="#1a1a18"/>
+<rect x="436" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="436" y="266" width="8" height="8" fill="#1a1a18"/>
+<rect x="436" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="436" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="436" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="436" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="436" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="436" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="436" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="470" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">14</text>
+<rect x="466" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="466" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="500" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">15</text>
+<rect x="496" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="496" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="530" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">16</text>
+<rect x="526" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="526" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="560" y="214" text-anchor="middle" font-size="10" fill="#8a8a84" font-weight="400">17</text>
+<rect x="556" y="226" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="246" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="266" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="286" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="306" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="356" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="376" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="396" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="416" width="8" height="8" fill="#d8d4cc"/>
+<rect x="556" y="436" width="8" height="8" fill="#d8d4cc"/>
+<text x="45" y="234" text-anchor="middle" font-size="10" fill="#8a8a84">a</text>
+<text x="45" y="254" text-anchor="middle" font-size="10" fill="#8a8a84">b</text>
+<text x="45" y="274" text-anchor="middle" font-size="10" fill="#8a8a84">c</text>
+<text x="45" y="294" text-anchor="middle" font-size="10" fill="#8a8a84">d</text>
+<text x="45" y="314" text-anchor="middle" font-size="10" fill="#8a8a84">e</text>
+<text x="45" y="364" text-anchor="middle" font-size="10" fill="#8a8a84">f</text>
+<text x="45" y="384" text-anchor="middle" font-size="10" fill="#8a8a84">g</text>
+<text x="45" y="404" text-anchor="middle" font-size="10" fill="#8a8a84">h</text>
+<text x="45" y="424" text-anchor="middle" font-size="10" fill="#8a8a84">i</text>
+<text x="45" y="444" text-anchor="middle" font-size="10" fill="#8a8a84">j</text>
+<text x="595" y="214" font-size="10" fill="#8a8a84">列</text>
+<path d="M250 86 L250 150 L140 150 L140 230" fill="none" stroke="#e67e22" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M340 86 L340 165 L290 165 L290 230" fill="none" stroke="#1a1a18" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M430 86 L430 150 L440 150 L440 230" fill="none" stroke="#2e6bc4" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="160" y="143" fill="#e67e22" font-size="11">オス－オス</text>
+<text x="350" y="160" fill="#1a1a18" font-size="11">オス－オス</text>
+<text x="450" y="143" fill="#2e6bc4" font-size="11">オス－オス</text>
+<line x1="140" y1="270" x2="230" y2="270" stroke="#8a8a84" stroke-width="2"/>
+<rect x="163.0" y="262" width="44" height="16" rx="5" fill="#e8d9b5" stroke="#8a6d2f"/>
+<text x="185.0" y="274" text-anchor="middle" font-size="10" fill="#5a4517">150Ω</text>
+<line x1="350" y1="270" x2="440" y2="270" stroke="#8a8a84" stroke-width="2"/>
+<rect x="373.0" y="262" width="44" height="16" rx="5" fill="#e8d9b5" stroke="#8a6d2f"/>
+<text x="395.0" y="274" text-anchor="middle" font-size="10" fill="#5a4517">150Ω</text>
+<circle cx="200" cy="545" r="16" fill="#e05050" stroke="#1a1a18"/>
+<text x="200" y="585" text-anchor="middle" fill="#1a1a18">左目LED</text>
+<circle cx="420" cy="545" r="16" fill="#e05050" stroke="#1a1a18"/>
+<text x="420" y="585" text-anchor="middle" fill="#1a1a18">右目LED</text>
+<path d="M230 310 L230 490 L192 490 L192 529" fill="none" stroke="#27ae60" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M290 290 L300 470 L208 470 L208 529" fill="none" stroke="#7f8c8d" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M350 310 L350 490 L428 490 L428 529" fill="none" stroke="#27ae60" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M290 310 L290 480 L412 480 L412 529" fill="none" stroke="#7f8c8d" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="120" y="515" fill="#27ae60" font-size="11">長い足（＋）</text>
+<text x="214" y="515" fill="#7f8c8d" font-size="11">短い足（－）</text>
+<text x="300" y="515" fill="#7f8c8d" font-size="11">短い足（－）</text>
+<text x="436" y="515" fill="#27ae60" font-size="11">長い足（＋）</text>
+<text x="520" y="545" fill="#4a4a46" font-size="11">オス－メス</text><text x="520" y="561" fill="#4a4a46" font-size="11">（メス側をLEDの足に）</text>
+</svg>
+    </div>
+    <table>
+      <tr><th>つなぐもの</th><th>挿す穴</th></tr>
+      <tr><td>本体 G21 →（オス－オス）</td><td>3列 a</td></tr>
+      <tr><td>本体 G（GND）→（オス－オス）</td><td>8列 a</td></tr>
+      <tr><td>本体 G25 →（オス－オス）</td><td>13列 a</td></tr>
+      <tr><td>抵抗 150Ω（左目用）</td><td>3列 c と 6列 c</td></tr>
+      <tr><td>抵抗 150Ω（右目用）</td><td>10列 c と 13列 c</td></tr>
+      <tr><td>左目LEDの長い足（＋）←（オス－メス）</td><td>6列 e</td></tr>
+      <tr><td>左目LEDの短い足（－）←（オス－メス）</td><td>8列 d</td></tr>
+      <tr><td>右目LEDの長い足（＋）←（オス－メス）</td><td>10列 e</td></tr>
+      <tr><td>右目LEDの短い足（－）←（オス－メス）</td><td>8列 e</td></tr>
+    </table>
+    <p>LEDは、足の長い方が＋です。逆に挿すと光りません。オス－メスのワイヤーは、メスの側をLEDの足に差し込み、オスの側をブレッドボードに挿します。</p>
+  </div>
+
+  <div class="section">
+    <p class="section-label">3. 本体のプログラム</p>
+    <p>本体に書き込むプログラムは、下のフォームからお申し込みいただくと、メールでお届けします。作ってみた感想をお聞きしてもよい方は、フォームでお知らせください。</p>
+    <p>プログラムの「ここに〜」の2か所（テザリングの名前とパスワード）の書きかえ以外の改造と、ほかの人への配布は認めていません。</p>
+    <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSdtm4qseZK3TqL6PzRe1HVDOD7lWBOfe-nI91UzC7byoQEZ6A/viewform">プログラムを申し込む</a>
+  </div>
+
+  <div class="section">
+    <p class="section-label">4. 本体に書き込む</p>
+    <ol>
+      <li>Arduino IDE（本体にプログラムを書き込むための無料のソフト）を、<a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">Arduinoの公式ページ</a>からダウンロードして、パソコンに入れます。</li>
+      <li>Arduino IDE を開き、上のメニューの「ファイル」→「基本設定」を開きます。「追加のボードマネージャのURL」の欄に、次の文字をそのまま貼り付けて「OK」を押します。<br><code>https://static-cdn.m5stack.com/resource/arduino/package_m5stack_index.json</code></li>
+      <li>左の列の「ボードマネージャ」（基板の絵）で「M5Stack」と探して「インストール」を押します。</li>
+      <li>同じく左の列の「ライブラリマネージャ」（本が並んだ絵）で「M5Unified」と探して「インストール」を押します。</li>
+      <li>メールのリンクから colon01.ino をダウンロードします。</li>
+      <li>ダウンロードした colon01.ino は、ふつう「ダウンロード」フォルダに入ります。これを、次の場所に移動します。
+        <ul>
+          <li>「ドキュメント」フォルダの中の「Arduino」フォルダを開きます（Windowsなら C:\Users\（お名前）\Documents\Arduino、Macなら「書類」→「Arduino」）。「Arduino」フォルダがなければ、新しく作ります。</li>
+          <li>その中に、新しいフォルダを作って、名前を「colon01」にします。</li>
+          <li>「ダウンロード」フォルダの colon01.ino を、この「colon01」フォルダの中に移動します。2回以上ダウンロードすると「colon01 (2).ino」のように名前が変わることがあります。そのときは、名前を「colon01.ino」に変えてから移動します。</li>
+          <li>フォルダの名前とファイルの名前は、同じ「colon01」でないと、Arduino IDE で開けません。</li>
+        </ul>
+      </li>
+      <li>colon01 フォルダの中の colon01.ino をダブルクリックして、Arduino IDE で開きます。</li>
+      <li>プログラムの上の方にある「ここにテザリングの名前」「ここにテザリングのパスワード」の2か所を、ご自分のiPhoneのものに書きかえます（<code>"</code> と <code>"</code> の間だけ）。
+        <ul>
+          <li>テザリングの名前：iPhoneの「設定」→「一般」→「情報」→「名前」に出ている名前です（例：○○のiPhone）。</li>
+          <li>テザリングのパスワード：iPhoneの「設定」→「インターネット共有」→「Wi-Fiのパスワード」に出ている文字です。</li>
+        </ul>
+      </li>
+      <li>本体をUSBケーブルでパソコンにつなぎます。</li>
+      <li>Arduino IDE の画面の上にある「ボードを選択」の欄を押し、「M5Atom」を選びます。見つからないときは、上のメニューの「ツール」→「ボード」→「M5Stack」→「M5Atom」で選びます。</li>
+      <li>上のメニューの「ツール」→「ポート」で、本体のポートを選びます（Windowsは「COM」と数字、Macは「/dev/cu.usbserial」で始まる名前）。</li>
+      <li>画面の左上にある「→」（右向きの矢印）のボタンが書き込みボタンです。押すと書き込みが始まり、下に「書き込み完了」と出たら終わりです。</li>
+      <li>うまくいかないときは、「ツール」→「Upload Speed」を「115200」にして、もう一度「→」を押します。</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <p class="section-label">5. 動かす</p>
+    <ol>
+      <li>iPhoneの「設定」→「インターネット共有」を開き、「ほかの人の接続を許可」と「互換性を優先」をオンにします。この画面を開いたまま、本体の電源を入れます（TailBATのボタンを1回押す。切るときは素早く2回押す）。</li>
+      <li>本体が「ピッ」と鳴ったら、iPhoneでアプリ「ボイスロボット」を開きます。</li>
+      <li>OpenAIのAPIキー（AIを使うための合い言葉）を用意します。
+        <ul>
+          <li><strong>ChatGPTのアプリや有料プラン（ChatGPT Plus など）とは別のものです。</strong>ChatGPTにお金を払っていても、APIのお金は別に入れる必要があります。</li>
+          <li><a href="https://platform.openai.com/" target="_blank" rel="noopener">OpenAIの開発者向けページ（platform.openai.com）</a>でアカウントを作り、支払い方法を登録して、使う分のお金を先に入れます（クレジット）。</li>
+          <li>同じページの「API keys」で「Create new secret key」を押すと、「sk-」で始まる長い文字が出ます。これがAPIキーです。一度しか表示されないので、すぐにコピーします。</li>
+        </ul>
+      </li>
+      <li>アプリの右上の歯車 →「OpenAIのAPIキー」の欄に貼り付けて、「保存して確かめる」を押します。</li>
+      <li>本体に話しかけると、「ナニ？ナニ？」と答えて聞き取り、返事をします。</li>
+    </ol>
+    <div class="highlight">
+      <p>アプリを開いている間だけ動きます。画面がつきっぱなしになるので、iPhoneの電池が早く減ります。OpenAIの利用料は、APIキーを登録したご本人に請求されます。</p>
+    </div>
+  </div>
+</div>
+<footer>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/">北陽テックのトップ</a>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/tokushoho.html">特定商取引法に基づく表記</a>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/privacy.html">プライバシーポリシー</a>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/terms.html">利用規約</a>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/disclaimer.html">免責事項</a>
+  <p>お問い合わせ：hokuyo.consulting@gmail.com</p>
+  <p>© 2026 北陽テック / Hokuyo Tech</p>
+</footer>
+</body>
+</html>
