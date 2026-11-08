@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ボイスロボット | 北陽テック</title>
+<meta name="description" content="話しかけると、カタコトで返事をする。自分で組み立てる小さな球体のおしゃべりロボットと話すためのiPhoneアプリです。">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a1a18; --ink-light: #4a4a46; --ink-muted: #8a8a84;
+    --paper: #f7f5f0; --accent: #2d5a3d; --border: #d8d4cc;
+  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.8; }
+  header { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--border); }
+  .logo { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 400; color: var(--ink); text-decoration: none; }
+  .logo span { font-size: 12px; color: var(--ink-muted); display: block; letter-spacing: 0.15em; font-family: 'Noto Sans JP', sans-serif; font-weight: 300; }
+  .container { max-width: 720px; margin: 0 auto; padding: 4rem 3rem; }
+  .hero { display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem; }
+  .hero img { width: 96px; height: 96px; border-radius: 22px; flex-shrink: 0; display: block; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.15em; color: var(--accent); }
+  h1 { font-family: 'Noto Serif JP', serif; font-size: 26px; font-weight: 400; line-height: 1.5; }
+  .catch { font-family: 'Noto Serif JP', serif; font-size: 20px; line-height: 1.8; margin-bottom: 0.75rem; }
+  .lead { font-size: 14px; color: var(--ink-light); margin-bottom: 1.5rem; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2.5rem; }
+  .button { display: inline-block; background: var(--accent); color: #fff; text-decoration: none; font-size: 14px; padding: 0.6rem 1.4rem; border-radius: 4px; }
+  .button.sub { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+  .section { border-bottom: 0.5px solid var(--border); padding: 1.5rem 0; }
+  .section:last-child { border-bottom: none; }
+  .section-label { font-size: 11px; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 0.75rem; }
+  .section p { font-size: 14px; color: var(--ink-light); line-height: 1.9; margin-bottom: 0.5rem; }
+  .section ul { font-size: 14px; color: var(--ink-light); line-height: 1.9; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+  .section li { margin-bottom: 0.25rem; }
+  .section a { color: var(--accent); }
+  .highlight { background: #f0f4f1; border-left: 2px solid var(--accent); padding: 1rem 1.25rem; margin-top: 0.75rem; border-radius: 0 4px 4px 0; }
+  .highlight p { margin: 0; }
+  footer { padding: 2.5rem 3rem; border-top: 0.5px solid var(--border); }
+  footer a { font-size: 12px; color: var(--ink-muted); text-decoration: none; margin-right: 1.5rem; }
+  footer a:hover { color: var(--accent); }
+  footer p { font-size: 12px; color: var(--ink-muted); margin-top: 1rem; }
+  @media (max-width: 600px) { header { padding: 1.5rem; } .container { padding: 3rem 1.5rem; } footer { padding: 2rem 1.5rem; } .hero img { width: 72px; height: 72px; border-radius: 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/" class="logo">北陽テック<span>Hokuyo Tech</span></a>
+</header>
+<div class="container">
+  <div class="hero">
+    <img src="icon.png" alt="ボイスロボットのアイコン" width="96" height="96">
+    <div>
+      <p class="eyebrow">iPhoneアプリ</p>
+      <h1>ボイスロボット</h1>
+    </div>
+  </div>
+  <p class="catch">話しかけると、カタコトで返事をする。</p>
+  <p class="lead">自分で組み立てる小さな球体のおしゃべりロボットと話すためのアプリです。はんだ付けは要りません。</p>
+  <div class="buttons">
+    <a class="button" href="https://apps.apple.com/jp/app/id6829222557">App Storeで見る（無料）</a>
+    <a class="button sub" href="guide.html">ロボットの作り方</a>
+  </div>
+
+  <div class="section">
+    <p class="section-label">できること</p>
+    <ul>
+      <li>呼ぶと「ナニ？ナニ？」と答えて、話を聞きます</li>
+      <li>返事は短いカタコト。たまに、ちょっとズレたことも言います</li>
+      <li>性格と機嫌があります（悪口を言うと機嫌が下がります）</li>
+      <li>「今の気分は？」と聞くと、機嫌に合わせて答えます</li>
+      <li>しばらく話しかけないと、独り言を言います（夜は言いません）</li>
+      <li>目の光で、今の状態を知らせます</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <p class="section-label">アプリで変えられること</p>
+    <ul>
+      <li>ロボットの名前</li>
+      <li>性格（元気さ・素直さ・まじめさ・気分の変わりやすさ・好奇心）</li>
+      <li>声の種類・速さ・高さ・大きさ</li>
+      <li>独り言の見本、覚えさせたい言葉（語録）</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <p class="section-label">使う前に必要なもの</p>
+    <ul>
+      <li>ロボット本体（ご自身で組み立てます。部品・配線図・本体のプログラムのお申し込みは<a href="guide.html">作り方のページ</a>へ）</li>
+      <li>OpenAIのAPIキー（ご自身で登録してください。利用料はOpenAI社からご自身に請求されます。ChatGPTのアプリや有料プランとは別のものです）</li>
+      <li>iPhoneのテザリング（インターネット共有）。ロボットはiPhoneとテザリングでつながります</li>
+    </ul>
+    <p>作者が使った部品の例：M5Stack ATOM Echo（本体）、ATOM TailBAT（電池）、赤色LED 2個、抵抗 2個、ブレッドボード、ジャンパーワイヤー、外側のケース</p>
+  </div>
+
+  <div class="section">
+    <p class="section-label">ご注意</p>
+    <ul>
+      <li>アプリを開いている間だけ動きます（画面を消したり、ほかのアプリに切り替えたりすると止まります）</li>
+      <li>画面がつきっぱなしになるので、iPhoneの電池が早く減ります</li>
+      <li>ネットにつながらないときは、ロボットが「ツナガラナイ、ツナガラナイ」と言います</li>
+    </ul>
+    <div class="highlight">
+      <p>返事を作るため、話しかけた言葉（文字にしたもの）と設定を、ご自身のAPIキーを使ってOpenAI社に送ります。北陽テックのサーバーは通りません。</p>
+    </div>
+  </div>
+</div>
+<footer>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/">北陽テックのトップ</a>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/tokushoho.html">特定商取引法に基づく表記</a>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/privacy.html">プライバシーポリシー</a>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/terms.html">利用規約</a>
+  <a href="https://hokuyoconsulting-cell.github.io/hokuyo-tech-web-prod/disclaimer.html">免責事項</a>
+  <p>お問い合わせ：hokuyo.consulting@gmail.com</p>
+  <p>© 2026 北陽テック / Hokuyo Tech</p>
+</footer>
+</body>
+</html>
